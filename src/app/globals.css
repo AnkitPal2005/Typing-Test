@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* Default Dark Theme variables */
+  --bg-color: #323437;
+  --main-color: #e2b714;
+  --caret-color: #e2b714;
+  --sub-color: #646669;
+  --sub-alt-color: #2c2e31;
+  --text-color: #d1d0c5;
+  --error-color: #ca4754;
+  --error-extra-color: #7e2a33;
+  --correct-color: #d1d0c5;
+  --font-sans: 'Outfit', sans-serif;
+  --font-mono: 'Roboto Mono', monospace;
+}
+
+html[data-theme="light"] {
+  --bg-color: #e8e8e8;
+  --main-color: #d1515a;
+  --caret-color: #d1515a;
+  --sub-color: #969696;
+  --sub-alt-color: #f5f5f5;
+  --text-color: #2c2e31;
+  --error-color: #ca4754;
+  --error-extra-color: #f7b2b7;
+  --correct-color: #2c2e31;
+}
+
+html[data-theme="matrix"] {
+  --bg-color: #000000;
+  --main-color: #15ff00;
+  --caret-color: #15ff00;
+  --sub-color: #003b00;
+  --sub-alt-color: #001100;
+  --text-color: #00ff00;
+  --error-color: #ff0000;
+  --error-extra-color: #550000;
+  --correct-color: #00ff00;
+}
+
+html[data-theme="hacker"] {
+  --bg-color: #111111;
+  --main-color: #00ff66;
+  --caret-color: #00ff66;
+  --sub-color: #555555;
+  --sub-alt-color: #1a1a1a;
+  --text-color: #aaaaaa;
+  --error-color: #ff3333;
+  --error-extra-color: #661111;
+  --correct-color: #ffffff;
+}
+
+html[data-theme="dracula"] {
+  --bg-color: #282a36;
+  --main-color: #ff79c6;
+  --caret-color: #f1fa8c;
+  --sub-color: #6272a4;
+  --sub-alt-color: #1d1f27;
+  --text-color: #f8f8f2;
+  --error-color: #ff5555;
+  --error-extra-color: #bd93f9;
+  --correct-color: #50fa7b;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+}
+
+.mono-font {
+  font-family: var(--font-mono);
+}
+
+/* Caret blinking keyframes */
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.caret-blink {
+  animation: blink 1s infinite;
+}
+
+/* Scroll styles */
+#words-wrapper {
+  scrollbar-width: none;
+}
+#words-wrapper::-webkit-scrollbar {
+  display: none;
+}
