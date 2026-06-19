@@ -20,26 +20,41 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up Node.js version
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '22.x'
+          cache: 'npm'
 
-      - name: npm install, build, and test
+      - name: Install dependencies (including devDependencies for build)
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
           NODE_ENV: production
-        run: |
-          npm install
-          npm run build --if-present
-          npm run test --if-present
+        # Use npm install (not ci) so devDeps are installed even in production mode.
+        # @tailwindcss/postcss is a devDependency required at build time.
+        # npm ci with NODE_ENV=production skips devDependencies - causing the build to fail.
+        run: npm install --include=dev
+
+      - name: Generate Prisma Client
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npx prisma generate
+
+      - name: Build Next.js application
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+          NODE_ENV: production
+        run: npm run build
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
           path: .
+          retention-days: 1
 
   deploy:
     runs-on: ubuntu-latest
