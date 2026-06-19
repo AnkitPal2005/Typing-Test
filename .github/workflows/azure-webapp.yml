@@ -9,6 +9,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
       - name: Checkout repository
@@ -49,9 +52,16 @@ jobs:
             -x "next-env.d.ts" \
             -x ".next/cache/*"
 
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_8D30372E2B5A4661AA8CDFB4A74AFC2B }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_42239FFFA4754B4A8B4706F056434722 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A47351D5F0C1463584DE8434655D1192 }}
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          app-name: 'wottacore-ankit'
+          slot-name: 'Production'
           package: release.zip
