@@ -1,7 +1,7 @@
 import React from 'react';
 import { prisma } from '@/lib/prisma';
 
-export const revalidate = 60; // Cache page for 60 seconds
+export const dynamic = 'force-dynamic';
 
 export default async function Leaderboard() {
   const users = await prisma.user.findMany({

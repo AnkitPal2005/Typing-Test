@@ -44,10 +44,10 @@ jobs:
         run: |
           zip -r release.zip . \
             -x "*.git*" \
-            -x "node_modules/*" \
             -x ".env*" \
             -x "*.tsbuildinfo" \
-            -x "next-env.d.ts"
+            -x "next-env.d.ts" \
+            -x ".next/cache/*"
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
