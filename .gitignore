@@ -30,8 +30,10 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files (do NOT commit - set as Azure App Service Application Settings)
+.env
+.env.*
+!.env.example
 
 # vercel
 .vercel
@@ -40,4 +42,15 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# prisma generated client (regenerated on deploy via postinstall)
 /src/generated/prisma
+
+# deployment artifacts
+release.zip
+*.zip
+
+# local azure cli config
+.azure/
+
+# oryx build system config (set per-deployment)
+.oryx/
