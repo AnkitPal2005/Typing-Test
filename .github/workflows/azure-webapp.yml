@@ -9,7 +9,6 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: production
 
     steps:
       - name: Checkout repository
@@ -25,25 +24,26 @@ jobs:
         run: npm ci
 
       - name: Generate Prisma Client
-        run: npx prisma generate
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npx prisma generate
 
       - name: Build Next.js application
-        run: npm run build
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          NODE_ENV: production
+        run: npm run build
 
       - name: Zip artifact for deployment
         run: |
           zip -r release.zip . \
-            --exclude "*.git*" \
-            --exclude "node_modules/*" \
-            --exclude ".env*" \
-            --exclude "*.tsbuildinfo" \
-            --exclude "next-env.d.ts"
+            -x "*.git*" \
+            -x "node_modules/*" \
+            -x ".env*" \
+            -x "*.tsbuildinfo" \
+            -x "next-env.d.ts"
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
